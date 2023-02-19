@@ -2,7 +2,8 @@ import MainLayout from "@/layouts/MainLayout";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import axios from "axios";
-import { doc, setDoc, updateDoc, getDoc } from "firebase/firestore";
+import { HiOutlinePlus } from "react-icons/hi";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Button from "@/components/Button";
 import { auth, db } from "@/libs/firebase";
@@ -15,7 +16,8 @@ const storage = getStorage();
 
 function NewBlogPost({}: Props) {
     const [title, setTitle] = useState<string>("");
-    const [outline, setOutline] = useState<string[]>();
+    const [outlines, setOutlines] = useState<string[]>([]);
+    const [outlineInput, setOutlineInput] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const [result, setResult] = useState<IResult>();
 
@@ -68,7 +70,7 @@ function NewBlogPost({}: Props) {
             setLoading(true);
             const { data } = await axios.post("/api/openai/getCompletion", {
                 title,
-                outline,
+                outlines,
             });
 
             const filename = new Date().getTime();
@@ -112,8 +114,35 @@ function NewBlogPost({}: Props) {
                     </div>
 
                     <div className="flex flex-col">
-                        <label>Enter Outline</label>
-                        <input type="text" className="p-1 border rounded" />
+                        <label>Enter Outline (Optional)</label>
+                        <div className="flex gap-2">
+                            <input
+                                type="text"
+                                className="p-1 border rounded"
+                                value={outlineInput}
+                                onChange={(e) =>
+                                    setOutlineInput(e.target.value)
+                                }
+                            />
+                            <button
+                                className="px-2 py-1 bg-primary hover:bg-primary-light rounded shadow-lg"
+                                onClick={(e) => {
+                                    if (outlineInput === "") return;
+                                    e.preventDefault();
+                                    setOutlines([...outlines, outlineInput]);
+                                    setOutlineInput("");
+                                }}
+                            >
+                                <HiOutlinePlus />
+                            </button>
+                        </div>
+                        <div>
+                            <ul className="list-disc list-inside">
+                                {outlines.map((item, index) => (
+                                    <li key={index}>{item}</li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
 
                     <Button onClick={onClickGenerate} isLoading={loading}>
@@ -163,6 +192,12 @@ function NewBlogPost({}: Props) {
                                 ),
                                 p: ({ node, ...props }) => (
                                     <p className="my-4" {...props} />
+                                ),
+                                ul: ({ node, ...props }) => (
+                                    <ul
+                                        className="list-disc list-inside"
+                                        {...props}
+                                    />
                                 ),
                             }}
                         >

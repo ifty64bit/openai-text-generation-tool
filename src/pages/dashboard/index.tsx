@@ -69,7 +69,7 @@ function Dashboard({}: Props) {
     }
     return (
         <MainLayout>
-            <div className="p-4 flex gap-4 flex-wrap ">
+            <div className="p-4 flex gap-4 flex-wrap content-start">
                 {blogs.length === 0 ? (
                     <div className="text-center">No blogs found</div>
                 ) : (

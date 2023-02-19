@@ -1,15 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import openai from "@/libs/openai";
+import { ArticleRequest } from "types";
 
 export default async function handler(
-    req: NextApiRequest,
+    req: ArticleRequest,
     res: NextApiResponse
 ) {
     try {
         const { title, outlines } = req.body;
         const { data } = await openai.createCompletion({
             model: "text-davinci-003",
-            prompt: `Write a long eassy tittled ${title} with proper heading, outline in MarkDown format`,
+            prompt: `Write a long eassay tittled ${title} with proper heading, ${
+                outlines.length == 0 ? "" : outlines.join(",")
+            } outline and description in MarkDown format`,
             max_tokens: 1000,
             temperature: 1,
         });
