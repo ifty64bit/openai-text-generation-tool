@@ -1,6 +1,6 @@
 [
     {
-        "origin": ["*"],
+        "origin": ["http://localhost:3000", "https://localhost:3000", "https://openai-text-generation-tool.vercel.app"],
         "method": ["GET"],
         "maxAgeSeconds": 3600
     }

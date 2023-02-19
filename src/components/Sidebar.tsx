@@ -35,6 +35,9 @@ function Sidebar({}: Props) {
                     <Image
                         src={auth.currentUser.photoURL}
                         alt={auth.currentUser?.displayName || "User"}
+                        width={100}
+                        height={100}
+                        className="rounded-full"
                     />
                 ) : (
                     <BiUserCircle className="text-7xl" />

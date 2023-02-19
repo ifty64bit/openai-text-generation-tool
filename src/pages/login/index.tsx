@@ -5,7 +5,11 @@ import { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { FcGoogle } from "react-icons/fc";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+    signInWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup,
+} from "firebase/auth";
 import { auth } from "@/libs/firebase";
 
 type Props = {};
@@ -17,11 +21,25 @@ const LoginSchema = Yup.object().shape({
     password: Yup.string().required("This Field is Required"),
 });
 
+const provider = new GoogleAuthProvider();
+
 function Login({}: Props) {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [errorMessages, setErrorMessages] = useState<string>("");
 
     const router = useRouter();
+
+    async function handleGoogleLogin() {
+        try {
+            const result = await signInWithPopup(auth, provider);
+            if (result.user) {
+                router.push("/dashboard");
+            }
+        } catch (error: any) {
+            console.error(error);
+            setErrorMessages(error?.code);
+        }
+    }
 
     return (
         <main className="w-screen min-h-screen flex justify-center items-center">
@@ -72,7 +90,9 @@ function Login({}: Props) {
                                             )
                                         }
                                     />
-                                    <p className="text-error">{errors.email ? errors.email : ""}</p>
+                                    <p className="text-error">
+                                        {errors.email ? errors.email : ""}
+                                    </p>
                                 </div>
                                 <div className="flex flex-col gap-2 text-center">
                                     <label>Password</label>
@@ -104,7 +124,10 @@ function Login({}: Props) {
                     <form className="text-center space-y-4"></form>
                 </div>
                 <div className="flex justify-center">
-                    <button className="flex justify-center items-center gap-4 w-40 h-10 bg-white border hover:shadow-lg transition-all duration-300 text-xl rounded-lg">
+                    <button
+                        className="flex justify-center items-center gap-4 w-40 h-10 bg-white border hover:shadow-lg transition-all duration-300 text-xl rounded-lg"
+                        onClick={handleGoogleLogin}
+                    >
                         <FcGoogle className="text-2xl" /> Google
                     </button>
                 </div>

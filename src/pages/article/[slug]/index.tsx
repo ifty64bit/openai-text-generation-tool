@@ -16,6 +16,7 @@ const storage = getStorage();
 function NewBlogPost({}: Props) {
     const [title, setTitle] = useState<string>("");
     const [outline, setOutline] = useState<string[]>();
+    const [loading, setLoading] = useState<boolean>(false);
     const [result, setResult] = useState<IResult>();
 
     const router = useRouter();
@@ -64,6 +65,7 @@ function NewBlogPost({}: Props) {
 
     async function onClickGenerate() {
         try {
+            setLoading(true);
             const { data } = await axios.post("/api/openai/getCompletion", {
                 title,
                 outline,
@@ -88,8 +90,10 @@ function NewBlogPost({}: Props) {
                 content: data.choices[0].text,
                 usage: data?.usage,
             });
+            setLoading(false);
         } catch (error) {
             console.log(error);
+            setLoading(false);
         }
     }
 
@@ -112,7 +116,9 @@ function NewBlogPost({}: Props) {
                         <input type="text" className="p-1 border rounded" />
                     </div>
 
-                    <Button onClick={onClickGenerate}>Generate</Button>
+                    <Button onClick={onClickGenerate} isLoading={loading}>
+                        Generate
+                    </Button>
                 </section>
                 <section className="pl-4">
                     <h3>Result</h3>
