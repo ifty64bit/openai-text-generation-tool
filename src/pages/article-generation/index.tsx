@@ -1,11 +1,119 @@
-import React from 'react'
+import BlogCard from "@/components/BlogCard";
+import Button from "@/components/Button";
+import CreateNewButton from "@/components/CreateNewButton";
+import Modal from "@/components/Modal";
+import MainLayout from "@/layouts/MainLayout";
+import { auth, db } from "@/libs/firebase";
+import {
+    collection,
+    doc,
+    getDoc,
+    getDocs,
+    query,
+    setDoc,
+    where,
+} from "firebase/firestore";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
+import type { Article } from "types";
+import { nanoid } from "nanoid";
 
-type Props = {}
+type Props = {
+    blogs: Article[];
+};
 
 function Article({}: Props) {
-  return (
-    <div>Article</div>
-  )
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [title, setTitle] = useState<string>("");
+    const [errorMessages, setErrorMessages] = useState<string>("");
+    const [blogs, setBlogs] = useState<any[]>([]);
+
+    const router = useRouter();
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const data = await getDocs(
+                    query(
+                        collection(db, "articles"),
+                        where("createdBy", "==", auth.currentUser?.uid)
+                    )
+                );
+                setBlogs(
+                    data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+                );
+            } catch (error) {
+                console.error(error);
+            }
+        })();
+    }, []);
+
+    async function onClickGo() {
+        if (title.length === 0) {
+            setErrorMessages("Title is required");
+            return;
+        }
+
+        try {
+            const uid = nanoid();
+            await setDoc(doc(db, "articles", uid), {
+                createdAt: new Date().toISOString(),
+                createdBy: auth.currentUser?.uid,
+            });
+            router.push(`/article/${uid}`);
+        } catch (error) {
+            console.error(error);
+            setErrorMessages("Something went wrong");
+        }
+    }
+    return (
+        <MainLayout>
+            <div className="p-4 flex gap-4 flex-wrap content-start">
+                {blogs.length === 0 ? (
+                    <div className="text-center">No blogs found</div>
+                ) : (
+                    blogs.map((article: any) => (
+                        <Link key={article.id} href={`/article/${article.id}`}>
+                            <BlogCard
+                                title={article.title}
+                                createdAt={new Date(
+                                    article.createdAt
+                                ).toDateString()}
+                            />
+                        </Link>
+                    ))
+                )}
+                <CreateNewButton onClick={() => setIsModalOpen(true)} />
+            </div>
+            <Modal
+                title="Create New Article"
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            >
+                <div>
+                    <div className="flex flex-col mb-2">
+                        <div className="mt-4">
+                            <label className="sr-only text-base text-gray-500">
+                                Enter Title
+                            </label>
+                            <input
+                                type="text"
+                                className="block w-full px-5 py-3 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
+                                placeholder="Enter Title"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                            />
+                        </div>
+                        <p className="text-error">{errorMessages}</p>
+                    </div>
+                    <Button className="ml-auto" onClick={onClickGo}>
+                        Go
+                    </Button>
+                </div>
+            </Modal>
+        </MainLayout>
+    );
 }
 
-export default Article
+export default Article;

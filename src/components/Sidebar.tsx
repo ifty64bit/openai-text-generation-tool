@@ -6,6 +6,7 @@ import { auth, db } from "@/libs/firebase";
 import sidebar from "../config/sidebar";
 import Link from "next/link";
 import { RxExit } from "react-icons/rx";
+import { useRouter } from "next/router";
 
 type Props = {};
 type User = {
@@ -16,6 +17,10 @@ type User = {
 
 function Sidebar({}: Props) {
     const [user, setUser] = useState<User>();
+
+    const { asPath } = useRouter();
+    const cleanPath = asPath.split("#")[0].split("?")[0];
+
     useEffect(() => {
         (async () => {
             if (auth.currentUser?.uid) {
@@ -37,32 +42,14 @@ function Sidebar({}: Props) {
                     <div className="flex flex-col w-64">
                         <div className="flex flex-col flex-grow pt-5 overflow-y-auto bg-indigo-700 border-r">
                             <div className="flex flex-col items-center flex-shrink-0 px-4">
-                                <a
-                                    href="./index.html"
+                                <Link
+                                    href="/"
                                     className="px-8 text-left focus:outline-none"
                                 >
                                     <h2 className="block p-2 text-xl font-medium tracking-tighter text-white transition duration-500 ease-in-out transform cursor-pointer hover:text-white">
                                         Project Name
                                     </h2>
-                                </a>
-                                <button className="hidden rounded-lg focus:outline-none focus:shadow-outline">
-                                    <svg
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                        className="w-6 h-6"
-                                    >
-                                        <path
-                                            fill-rule="evenodd"
-                                            d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z"
-                                            clip-rule="evenodd"
-                                        ></path>
-                                        <path
-                                            fill-rule="evenodd"
-                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                            clip-rule="evenodd"
-                                        ></path>
-                                    </svg>
-                                </button>
+                                </Link>
                             </div>
                             <div className="flex flex-col flex-grow px-4 mt-5">
                                 <nav className="flex-1 space-y-1 bg-indigo-700">
@@ -70,7 +57,7 @@ function Sidebar({}: Props) {
                                         {sidebar.map((item, i) => (
                                             <li key={i}>
                                                 <a
-                                                    className="inline-flex items-center w-full px-4 py-2 mt-1 text-base text-white transition duration-500 ease-in-out transform bg-indigo-600 rounded-lg focus:shadow-outline"
+                                                    className={`inline-flex items-center w-full px-4 py-2 mt-1 text-base text-white transition duration-500 ease-in-out transform ${cleanPath==item.route? "bg-indigo-800" : "bg-indigo-600"}  rounded-lg focus:shadow-outline`}
                                                     href={item.route as string}
                                                 >
                                                     {item.icon}
@@ -96,7 +83,7 @@ function Sidebar({}: Props) {
                                     </ul>
                                 </nav>
                             </div>
-                            <div className="flex flex-shrink-0 p-4 px-4 bg-indigo-600">
+                            <div className="flex flex-shrink-0 p-4 px-4 bg-indigo-600 rounded-t-xl">
                                 <a
                                     href="#"
                                     className="flex-shrink-0 block w-full group"
