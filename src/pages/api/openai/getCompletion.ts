@@ -8,6 +8,8 @@ export default async function handler(
 ) {
     try {
         const { title, outlines } = req.body;
+        console.log(title, outlines);
+        
         const { data } = await openai.createCompletion({
             model: "text-davinci-003",
             prompt: `Write a long eassay tittled ${title} with proper heading, ${
