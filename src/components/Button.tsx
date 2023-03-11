@@ -30,18 +30,18 @@ function Button({
             onClick={onClick}
         >
             <span className="absolute inset-y-0 left-0 w-[2px] bg-indigo-600 transition-all group-hover:w-full group-active:bg-indigo-500" />
-            <TailSpin
-                height="20"
-                width="20"
-                color="#ffffff"
-                ariaLabel="tail-spin-loading"
-                radius="1"
-                wrapperStyle={{}}
-                wrapperClass=""
-                visible={isLoading}
-            />
-            <span className="relative text-sm font-medium text-indigo-600 transition-colors group-hover:text-white">
-                {children}
+            <span className="relative text-sm font-medium text-indigo-600 transition-colors group-hover:text-white flex gap-2 items-center justify-center">
+                {children}{" "}
+                <TailSpin
+                    height="20"
+                    width="20"
+                    color="gray"
+                    ariaLabel="tail-spin-loading"
+                    radius="1"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    visible={isLoading}
+                />
             </span>
         </button>
     );

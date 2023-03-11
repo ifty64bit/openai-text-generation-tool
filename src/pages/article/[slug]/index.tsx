@@ -8,7 +8,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Button from "@/components/Button";
 import { auth, db } from "@/libs/firebase";
 import { useRouter } from "next/router";
-import { IResult } from "types";
+import { Article } from "types";
 
 type Props = {};
 
@@ -19,7 +19,7 @@ function NewBlogPost({}: Props) {
     const [outlines, setOutlines] = useState<string[]>([]);
     const [outlineInput, setOutlineInput] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
-    const [result, setResult] = useState<IResult>();
+    const [result, setResult] = useState<Article>();
 
     const router = useRouter();
 
@@ -38,7 +38,7 @@ function NewBlogPost({}: Props) {
                     const url = await getDownloadURL(fileRef);
                     const response = await axios.get(url);
 
-                    const result: IResult = {
+                    const result: Article = {
                         title: data.data()?.title,
                         content: response.data,
                         usage: data.data()?.usage,
@@ -47,7 +47,7 @@ function NewBlogPost({}: Props) {
                     };
                     setResult(result);
                 } else {
-                    const result: IResult = {
+                    const result: Article = {
                         title: data.data()?.title,
                         content: data.data()?.content,
                         usage: data.data()?.usage,
@@ -87,8 +87,9 @@ function NewBlogPost({}: Props) {
                 createdBy: auth.currentUser?.uid,
                 usage: data?.usage,
             });
+
             setResult({
-                ...result,
+                ...result!,
                 content: data.choices[0].text,
                 usage: data?.usage,
             });
@@ -195,7 +196,7 @@ function NewBlogPost({}: Props) {
                                 ),
                                 ul: ({ node, ...props }) => (
                                     <ul
-                                        className="list-disc list-inside"
+                                    className={`list-disc ml-4`}
                                         {...props}
                                     />
                                 ),

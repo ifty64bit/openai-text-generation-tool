@@ -58,6 +58,7 @@ function Article({}: Props) {
         try {
             const uid = nanoid();
             await setDoc(doc(db, "articles", uid), {
+                title: title,
                 createdAt: new Date().toISOString(),
                 createdBy: auth.currentUser?.uid,
             });
