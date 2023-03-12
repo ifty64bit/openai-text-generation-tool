@@ -66,7 +66,7 @@ function SummaryGeneration({}: Props) {
         }
     }
     return (
-        <MainLayout>
+        <MainLayout pageTitle="Summary Generation">
             <div className="w-full p-4 flex gap-4 flex-wrap content-start">
                 {summaries.length === 0 ? (
                     <div className="text-center w-full">No Summary found</div>

@@ -106,7 +106,7 @@ function NewBlogPost({}: Props) {
     }
 
     return (
-        <MainLayout>
+        <MainLayout pageTitle="Generate Article">
             <div className="p-4 flex gap-4">
                 <section className="w-72 pr-4 border-r space-y-4">
                     <div className="flex flex-col">

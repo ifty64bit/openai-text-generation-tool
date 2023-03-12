@@ -68,13 +68,16 @@ function Article({}: Props) {
         }
     }
     return (
-        <MainLayout>
+        <MainLayout pageTitle="Article Generation">
             <div className="p-4 flex gap-4 flex-wrap content-start">
                 {blogs.length === 0 ? (
                     <div className="text-center">No blogs found</div>
                 ) : (
                     blogs.map((article: any) => (
-                        <Link key={article.id} href={`/article-generation/article/${article.id}`}>
+                        <Link
+                            key={article.id}
+                            href={`/article-generation/article/${article.id}`}
+                        >
                             <BlogCard
                                 title={article.title}
                                 createdAt={new Date(

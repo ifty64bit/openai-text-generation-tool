@@ -23,7 +23,7 @@ function Dashboard({}: Props) {
     const router = useRouter();
 
     return (
-        <MainLayout>
+        <MainLayout pageTitle="Dashboard">
             <div className="p-4 flex gap-4 flex-wrap content-start">
                 Under Construction
             </div>

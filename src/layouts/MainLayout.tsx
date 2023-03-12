@@ -1,18 +1,25 @@
 import Sidebar from "@/components/Sidebar";
+import Head from "next/head";
 import React from "react";
 
 type Props = {
+    pageTitle: string;
     children: React.ReactNode;
 };
 
-function MainLayout({ children }: Props) {
+function MainLayout({ pageTitle, children }: Props) {
     return (
-        <main className="flex gap-2">
-            <div className="h-screen shrink-0">
-                <Sidebar />
-            </div>
-            <>{children}</>
-        </main>
+        <>
+            <Head>
+                <title>{pageTitle}</title>
+            </Head>
+            <main className="flex gap-2">
+                <div className="h-screen shrink-0">
+                    <Sidebar />
+                </div>
+                <>{children}</>
+            </main>
+        </>
     );
 }
 
