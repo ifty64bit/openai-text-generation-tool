@@ -12,21 +12,19 @@ import {
     setDoc,
     where,
 } from "firebase/firestore";
+import { nanoid } from "nanoid";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
-import type { Article } from "types";
-import { nanoid } from "nanoid";
+import { useEffect, useState } from "react";
+import { Summary } from "types";
 
-type Props = {
-    blogs: Article[];
-};
+type Props = {};
 
-function Article({}: Props) {
+function SummaryGeneration({}: Props) {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [title, setTitle] = useState<string>("");
     const [errorMessages, setErrorMessages] = useState<string>("");
-    const [blogs, setBlogs] = useState<any[]>([]);
+    const [summaries, setSummaries] = useState<any[]>([]);
 
     const router = useRouter();
 
@@ -35,11 +33,11 @@ function Article({}: Props) {
             try {
                 const data = await getDocs(
                     query(
-                        collection(db, "articles"),
+                        collection(db, "summaries"),
                         where("createdBy", "==", auth.currentUser?.uid)
                     )
                 );
-                setBlogs(
+                setSummaries(
                     data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
                 );
             } catch (error) {
@@ -56,12 +54,12 @@ function Article({}: Props) {
 
         try {
             const uid = nanoid();
-            await setDoc(doc(db, "articles", uid), {
+            await setDoc(doc(db, "summaries", uid), {
                 title: title,
                 createdAt: new Date().toISOString(),
                 createdBy: auth.currentUser?.uid,
             });
-            router.push(`/article-generation/article/${uid}`);
+            router.push(`/summary-generation/summary/${uid}`);
         } catch (error) {
             console.error(error);
             setErrorMessages("Something went wrong");
@@ -69,16 +67,19 @@ function Article({}: Props) {
     }
     return (
         <MainLayout>
-            <div className="p-4 flex gap-4 flex-wrap content-start">
-                {blogs.length === 0 ? (
-                    <div className="text-center">No blogs found</div>
+            <div className="w-full p-4 flex gap-4 flex-wrap content-start">
+                {summaries.length === 0 ? (
+                    <div className="text-center w-full">No Summary found</div>
                 ) : (
-                    blogs.map((article: any) => (
-                        <Link key={article.id} href={`/article-generation/article/${article.id}`}>
+                    summaries.map((summary: Summary) => (
+                        <Link
+                            key={summary.id}
+                            href={`/summary-generation/summary/${summary.id}`}
+                        >
                             <BlogCard
-                                title={article.title}
+                                title={summary.title}
                                 createdAt={new Date(
-                                    article.createdAt
+                                    summary.createdAt
                                 ).toDateString()}
                             />
                         </Link>
@@ -87,7 +88,7 @@ function Article({}: Props) {
                 <CreateNewButton onClick={() => setIsModalOpen(true)} />
             </div>
             <Modal
-                title="Create New Article"
+                title="Create New Summary"
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
             >
@@ -116,4 +117,4 @@ function Article({}: Props) {
     );
 }
 
-export default Article;
+export default SummaryGeneration;

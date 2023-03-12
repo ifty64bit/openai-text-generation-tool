@@ -8,7 +8,7 @@ type Props = {
 function CreateNewButton({ onClick }: Props) {
     return (
         <button
-            className="w-80 min-h-max bg-white border p-2 flex flex-col justify-center items-center rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+            className="w-80 h-44 bg-white border p-2 flex flex-col justify-center items-center rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
             onClick={onClick}
         >
             <BiPlus size={40} />

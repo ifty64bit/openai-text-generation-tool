@@ -13,9 +13,27 @@ export interface Article extends DocumentData {
     };
 }
 
+export interface Summary extends DocumentData {
+    title: string;
+    providedArticle: string;
+    summary: string;
+    createdBy: string;
+    usage: {
+        completion_tokens: number;
+        prompt_tokens: number;
+        total_tokens: number;
+    };
+}
+
 export interface ArticleRequest extends NextApiRequest {
     body: {
         title: string;
         outlines: string[];
+    };
+}
+
+export interface SummaryRequest extends NextApiRequest {
+    body: {
+        article: string;
     };
 }

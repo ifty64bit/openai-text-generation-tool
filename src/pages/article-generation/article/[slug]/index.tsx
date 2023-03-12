@@ -68,10 +68,13 @@ function NewBlogPost({}: Props) {
     async function onClickGenerate() {
         try {
             setLoading(true);
-            const { data } = await axios.post("/api/openai/getCompletion", {
-                title,
-                outlines,
-            });
+            const { data } = await axios.post(
+                "/api/openai/article-generation/getCompletion",
+                {
+                    title,
+                    outlines,
+                }
+            );
 
             const filename = new Date().getTime();
             const uploadedData = await uploadBytes(
@@ -196,7 +199,7 @@ function NewBlogPost({}: Props) {
                                 ),
                                 ul: ({ node, ...props }) => (
                                     <ul
-                                    className={`list-disc ml-4`}
+                                        className={`list-disc ml-4`}
                                         {...props}
                                     />
                                 ),

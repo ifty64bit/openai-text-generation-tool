@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponse } from "next";
 import openai from "@/libs/openai";
 import { ArticleRequest } from "types";
 
