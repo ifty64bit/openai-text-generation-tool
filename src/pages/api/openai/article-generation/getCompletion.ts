@@ -7,14 +7,14 @@ export default async function handler(
     res: NextApiResponse
 ) {
     try {
-        const { title, outlines } = req.body;
+        const { title, outlines, tone } = req.body;
         console.log(title, outlines);
         
         const { data } = await openai.createCompletion({
             model: "text-davinci-003",
             prompt: `Write a long eassay tittled ${title} with proper heading, ${
                 outlines.length == 0 ? "" : outlines.join(",")
-            } outline and description in MarkDown format`,
+            } outline and description in ${tone} ans make it MarkDown format`,
             max_tokens: 1000,
             temperature: 1,
         });

@@ -29,6 +29,7 @@ export interface ArticleRequest extends NextApiRequest {
     body: {
         title: string;
         outlines: string[];
+        tone: string;
     };
 }
 

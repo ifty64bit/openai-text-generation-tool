@@ -80,7 +80,9 @@ function Summary({}: Props) {
                         ref={article}
                         defaultValue={result?.providedArticle}
                     />
-                    <Button onClick={onClickGenerate}>Generate</Button>
+                    <Button onClick={onClickGenerate} isLoading={loading}>
+                        Generate
+                    </Button>
                 </div>
                 <div className="w-1/2 space-y-4">
                     <div>

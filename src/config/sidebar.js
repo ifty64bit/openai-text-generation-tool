@@ -6,11 +6,11 @@ const sidebar = [
         icon: <RxDashboard />,
         route: "/dashboard",
     },
-    {
-        name: "Profile",
-        icon: <RxPerson />,
-        route: "user",
-    },
+    // {
+    //     name: "Profile",
+    //     icon: <RxPerson />,
+    //     route: "user",
+    // },
     {
         name: "Article Generation",
         icon: <RxFileText />,

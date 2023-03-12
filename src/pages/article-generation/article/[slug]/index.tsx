@@ -17,6 +17,7 @@ const storage = getStorage();
 function NewBlogPost({}: Props) {
     const [title, setTitle] = useState<string>("");
     const [outlines, setOutlines] = useState<string[]>([]);
+    const [tone, setTone] = useState<string>("academic");
     const [outlineInput, setOutlineInput] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const [result, setResult] = useState<Article>();
@@ -73,6 +74,7 @@ function NewBlogPost({}: Props) {
                 {
                     title,
                     outlines,
+                    tone,
                 }
             );
 
@@ -146,6 +148,23 @@ function NewBlogPost({}: Props) {
                                     <li key={index}>{item}</li>
                                 ))}
                             </ul>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className="flex flex-col">
+                            <label>Select Tone</label>
+                            <select
+                                className="p-1 rounded border"
+                                onChange={(e) => console.log(e.target.value)}
+                            >
+                                <option value="academic">Academic</option>
+                                <option value="business">Business</option>
+                                <option value="creative">Creative</option>
+                                <option value="friendly">Friendly</option>
+                                <option value="polite">Polite</option>
+                                <option value="formal">Formal</option>
+                            </select>
                         </div>
                     </div>
 
